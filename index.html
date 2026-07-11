@@ -492,14 +492,14 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
   <div class="wrap hero-inner">
     <div class="hero-grid">
       <div class="hero-text">
-        <span class="eyebrow hero-reveal">Rawalpindi · Saddar Bazaar · Est. wholesale trade</span>
+        <span class="eyebrow hero-reveal">Rawalpindi · Saddar Bazaar</span>
         <h1>
           <span class="line"><span>Har variety.</span></span>
           <span class="line"><span>Har rang.</span></span>
           <span class="line"><span><em class="accent">Wholesale rate.</em></span></span>
         </h1>
         <p class="hero-sub hero-reveal">
-          Wholesale <b>rexine, PVC synthetic leather, foam, vinyl flooring &amp;
+          Wholesale <b>rexine, quilted rexine, PVC synthetic leather, foam, vinyl flooring &amp;
           upholstery cloth</b> — the widest variety at honest wholesale prices.
         </p>
         <div class="hero-cta hero-reveal">
@@ -717,9 +717,9 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
     <!-- FORM -->
     <div class="form-card reveal d2">
       <div id="formInner">
-        <h3>Send a business enquiry</h3>
+        <h3>Send a business inquiry</h3>
         <p>Fill in the details and we'll reply with pricing &amp; availability.</p>
-        <form class="form" id="enquiryForm" novalidate>
+        <form class="form" id="inquiryForm" novalidate>
           <div class="field row2">
             <div class="field">
               <label for="name">Name <span class="req">*</span></label>
@@ -746,7 +746,7 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
             </select>
           </div>
           <div class="field">
-            <label for="message">Your enquiry <span class="req">*</span></label>
+            <label for="message">Your inquiry <span class="req">*</span></label>
             <textarea id="message" name="message" placeholder="e.g. I need black rexine in bulk. Please share your wholesale rate." required></textarea>
             <span class="err">Please add a short message.</span>
           </div>
@@ -841,7 +841,7 @@ const CONFIG = {
   /* ---- default WhatsApp links ---- */
   const waBase = 'https://wa.me/'+CONFIG.whatsapp;
   const waDefault = waBase + '?text=' + encodeURIComponent(
-    "Hello Naveed Sons, I would like to enquire about your products. Could you please share the details?");
+    "Hello Naveed Sons, I would like to inquire about your products. Could you please share the details?");
   document.querySelectorAll('[data-wa]').forEach(el=>{
     el.setAttribute('href', waDefault);
     el.setAttribute('target','_blank'); el.setAttribute('rel','noopener');
@@ -898,7 +898,7 @@ const CONFIG = {
   document.getElementById('year').textContent = new Date().getFullYear();
 
   /* ---- FORM → WhatsApp ---- */
-  const form = document.getElementById('enquiryForm');
+  const form = document.getElementById('inquiryForm');
   const successBox = document.getElementById('formSuccess');
   const formInner = document.getElementById('formInner');
 
@@ -925,7 +925,7 @@ const CONFIG = {
     if(!valid){ form.querySelector('.invalid input, .invalid textarea')?.focus(); return; }
 
     const text =
-      "Hello Naveed Sons, I would like to make an enquiry.%0A%0A" +
+      "Hello Naveed Sons, I would like to make an inquiry.%0A%0A" +
       "Name: " + encodeURIComponent(name.value.trim()) + "%0A" +
       "Phone: " + encodeURIComponent(phone.value.trim()) + "%0A" +
       "Interested in: " + encodeURIComponent(interest) + "%0A" +
