@@ -194,16 +194,16 @@ header.nav.scrolled{
 .hero.in .sc1{ animation-delay:.45s; } .hero.in .sc2{ animation-delay:.6s; } .hero.in .sc3{ animation-delay:.72s; }
 @keyframes scIn{ from{ opacity:0; transform:translateY(40px) rotate(0); } to{ opacity:1; } }
 
-/* leather / rexine texture fills */
+/* brand-toned material fills (cohesive blue family) */
 .tex-cognac{ background:
-  radial-gradient(120% 120% at 30% 20%, #d9a25b 0%, #a86a2f 55%, #6f4318 100%); }
-.tex-oxblood{ background:radial-gradient(120% 120% at 30% 20%,#8a3b3b,#5c2222 55%,#361212); }
-.tex-charcoal{ background:radial-gradient(120% 120% at 30% 20%,#3a3632,#221f1c 60%,#141210); }
-.tex-teal{ background:radial-gradient(120% 120% at 30% 20%,#2f6f6a,#1c4a47 55%,#0f2b29); }
-.tex-sand{ background:radial-gradient(120% 120% at 30% 20%,#d9c7a3,#b39c72 55%,#7c6845); }
-.tex-navy{ background:radial-gradient(120% 120% at 30% 20%,#33507a,#1f3557 55%,#111f36); }
-.tex-emerald{ background:radial-gradient(120% 120% at 30% 20%,#2f7a4d,#1c5233 55%,#0f2e1d); }
-.tex-plum{ background:radial-gradient(120% 120% at 30% 20%,#6b3a63,#472642 55%,#2a1627); }
+  radial-gradient(120% 120% at 30% 20%, #2aa3ea 0%, #0a76bd 55%, #084a80 100%); }
+.tex-oxblood{ background:radial-gradient(120% 120% at 30% 20%,#2f6796,#1d4569 55%,#12293f); }
+.tex-charcoal{ background:radial-gradient(120% 120% at 30% 20%,#2b3239,#1a1f25 60%,#12151a); }
+.tex-teal{ background:radial-gradient(120% 120% at 30% 20%,#1fa5cc,#127793 55%,#0a4a60); }
+.tex-sand{ background:radial-gradient(120% 120% at 30% 20%,#cfe4f6,#a5c7e6 55%,#7ba3cc); }
+.tex-navy{ background:radial-gradient(120% 120% at 30% 20%,#1d4e80,#12345a 55%,#0a1f38); }
+.tex-emerald{ background:radial-gradient(120% 120% at 30% 20%,#1b93b6,#126882 55%,#0a4254); }
+.tex-plum{ background:radial-gradient(120% 120% at 30% 20%,#3c528c,#273864 55%,#182346); }
 /* subtle grain overlay for material feel */
 .tex-grain{ position:relative; }
 .tex-grain::before{ content:""; position:absolute; inset:0;
@@ -271,21 +271,23 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 
 /* ============ PRODUCTS ============ */
 .prod-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
-.prod{ position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);
-  background:var(--surface); min-height:300px; display:flex; flex-direction:column; justify-content:flex-end;
-  transition:transform .5s var(--ease), border-color .5s, box-shadow .5s; }
-.prod:hover{ transform:translateY(-8px); border-color:var(--line-strong); box-shadow:var(--shadow); }
-.prod .swatch{ position:absolute; inset:0; z-index:0; transition:transform .8s var(--ease); }
-.prod:hover .swatch{ transform:scale(1.06); }
-.prod .swatch::after{ content:""; position:absolute; inset:0;
-  background:linear-gradient(180deg,rgba(13,11,9,.15) 0%,rgba(13,11,9,.55) 55%,rgba(13,11,9,.92) 100%); }
-.prod-body{ position:relative; z-index:1; padding:26px; }
-.prod .pnum{ font-family:'Playfair Display',serif; font-style:italic; color:var(--accent-3); font-size:15px; }
-.prod h3{ font-size:23px; margin-top:8px; color:#fff; }
-.prod p{ margin-top:10px; font-size:14.5px; color:rgba(244,236,224,.82); }
-.prod .chip{ display:inline-block; margin-top:16px; font-size:12px; font-weight:600; letter-spacing:.05em;
-  color:var(--accent-3); border:1px solid var(--line-strong); border-radius:100px; padding:6px 14px;
-  background:rgba(13,11,9,.4); }
+.prod{ position:relative; border-radius:var(--radius); border:1px solid var(--line);
+  background:var(--surface); display:flex; flex-direction:column;
+  box-shadow:0 1px 3px rgba(20,45,90,.05);
+  transition:transform .4s var(--ease), border-color .4s, box-shadow .4s; }
+.prod:hover{ transform:translateY(-6px); border-color:var(--accent); box-shadow:var(--shadow); }
+.prod-body{ position:relative; z-index:1; padding:30px; }
+.prod .picon{ width:56px; height:56px; border-radius:16px; display:grid; place-items:center; margin-bottom:22px;
+  background:linear-gradient(150deg, rgba(0,137,226,.14), rgba(0,137,226,.05));
+  border:1px solid var(--line); transition:background .4s, transform .4s; }
+.prod:hover .picon{ background:linear-gradient(150deg, rgba(0,137,226,.24), rgba(0,137,226,.09)); transform:translateY(-2px); }
+.prod .picon svg{ width:28px; height:28px; color:var(--accent); }
+.prod .pnum{ font-family:'Playfair Display',serif; font-style:italic; color:var(--accent); font-size:15px; }
+.prod h3{ font-size:22px; margin-top:6px; color:var(--text); }
+.prod p{ margin-top:10px; font-size:14.5px; color:var(--text-soft); }
+.prod .chip{ display:inline-block; margin-top:18px; font-size:12px; font-weight:600; letter-spacing:.05em;
+  color:var(--accent); border:1px solid var(--line-strong); border-radius:100px; padding:6px 14px;
+  background:rgba(0,137,226,.06); }
 
 /* ============ WHY / FEATURES ============ */
 .why{ background:var(--bg-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
@@ -510,9 +512,9 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
 
       <div class="hero-visual" aria-hidden="true">
         <div class="swatch-stack">
-          <div class="swatch-card sc1 tex-cognac tex-grain"><span class="tag">Rexine · Cognac</span></div>
-          <div class="swatch-card sc2 tex-teal tex-grain"><span class="tag">Sofa Cloth · Teal</span></div>
-          <div class="swatch-card sc3 tex-oxblood tex-grain"><span class="tag">Auto · Oxblood</span></div>
+          <div class="swatch-card sc1 tex-cognac tex-grain"><span class="tag">Rexine</span></div>
+          <div class="swatch-card sc2 tex-teal tex-grain"><span class="tag">Upholstery Cloth</span></div>
+          <div class="swatch-card sc3 tex-oxblood tex-grain"><span class="tag">Vinyl Flooring</span></div>
         </div>
       </div>
     </div>
@@ -528,28 +530,40 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
     </div>
     <div class="prod-grid">
       <article class="prod reveal">
-        <div class="swatch tex-cognac tex-grain"></div>
-        <div class="prod-body"><div class="pnum">01</div><h3>Rexine &amp; PVC Synthetic Leather</h3><p>All types and thicknesses, in every colour.</p><span class="chip">All varieties</span></div>
+        <div class="prod-body">
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></div>
+          <div class="pnum">01</div><h3>Rexine &amp; PVC Synthetic Leather</h3><p>All types and thicknesses, in every colour.</p><span class="chip">All varieties</span>
+        </div>
       </article>
       <article class="prod reveal d1">
-        <div class="swatch tex-charcoal tex-grain"></div>
-        <div class="prod-body"><div class="pnum">02</div><h3>Foam &amp; Foam Products</h3><p>Cushioning foam in all densities and sizes.</p><span class="chip">All densities</span></div>
+        <div class="prod-body">
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2.5"/><rect x="3" y="13" width="18" height="7" rx="2.5"/></svg></div>
+          <div class="pnum">02</div><h3>Foam &amp; Foam Products</h3><p>Cushioning foam in all densities and sizes.</p><span class="chip">All densities</span>
+        </div>
       </article>
       <article class="prod reveal d2">
-        <div class="swatch tex-teal tex-grain"></div>
-        <div class="prod-body"><div class="pnum">03</div><h3>PVC Vinyl Flooring</h3><p>Durable, easy-clean rolls and tiles.</p><span class="chip">Rolls &amp; tiles</span></div>
+        <div class="prod-body">
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+          <div class="pnum">03</div><h3>PVC Vinyl Flooring</h3><p>Durable, easy-clean rolls and tiles.</p><span class="chip">Rolls &amp; tiles</span>
+        </div>
       </article>
       <article class="prod reveal d3">
-        <div class="swatch tex-oxblood tex-grain"></div>
-        <div class="prod-body"><div class="pnum">04</div><h3>Auto Cloth</h3><p>Upholstery fabric &amp; leatherette for car interiors.</p><span class="chip">Interior grade</span></div>
+        <div class="prod-body">
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.6-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.5-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></div>
+          <div class="pnum">04</div><h3>Auto Cloth</h3><p>Upholstery fabric &amp; leatherette for car interiors.</p><span class="chip">Interior grade</span>
+        </div>
       </article>
       <article class="prod reveal d4">
-        <div class="swatch tex-navy tex-grain"></div>
-        <div class="prod-body"><div class="pnum">05</div><h3>Sofa &amp; Upholstery Cloth</h3><p>Sofa fabrics and covering cloth for furniture.</p><span class="chip">Designer prints</span></div>
+        <div class="prod-body">
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11a2 2 0 0 1 2 2v3h16v-3a2 2 0 0 1 2-2 2 2 0 0 0-2-2 2 2 0 0 0-2 2v3H6v-3a2 2 0 0 0-2-2 2 2 0 0 0-2 2Z"/><path d="M4 18v2M20 18v2M12 4v9"/></svg></div>
+          <div class="pnum">05</div><h3>Sofa &amp; Upholstery Cloth</h3><p>Sofa fabrics and covering cloth for furniture.</p><span class="chip">Designer prints</span>
+        </div>
       </article>
       <article class="prod reveal d5">
-        <div class="swatch tex-plum tex-grain"></div>
-        <div class="prod-body"><div class="pnum">06</div><h3>Quilts, Pillows &amp; Bedding</h3><p>Ready quilts, pillows and embroidery leather.</p><span class="chip">+ Embroidery leather</span></div>
+        <div class="prod-body">
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M12 4v6M2 18h20"/></svg></div>
+          <div class="pnum">06</div><h3>Quilts, Pillows &amp; Bedding</h3><p>Ready quilts, pillows and embroidery leather.</p><span class="chip">+ Embroidery leather</span>
+        </div>
       </article>
     </div>
   </div>
