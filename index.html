@@ -194,16 +194,15 @@ header.nav.scrolled{
 .hero.in .sc1{ animation-delay:.45s; } .hero.in .sc2{ animation-delay:.6s; } .hero.in .sc3{ animation-delay:.72s; }
 @keyframes scIn{ from{ opacity:0; transform:translateY(40px) rotate(0); } to{ opacity:1; } }
 
-/* brand-toned material fills (cohesive blue family) */
-.tex-cognac{ background:
-  radial-gradient(120% 120% at 30% 20%, #2aa3ea 0%, #0a76bd 55%, #084a80 100%); }
-.tex-oxblood{ background:radial-gradient(120% 120% at 30% 20%,#2f6796,#1d4569 55%,#12293f); }
-.tex-charcoal{ background:radial-gradient(120% 120% at 30% 20%,#2b3239,#1a1f25 60%,#12151a); }
-.tex-teal{ background:radial-gradient(120% 120% at 30% 20%,#1fa5cc,#127793 55%,#0a4a60); }
-.tex-sand{ background:radial-gradient(120% 120% at 30% 20%,#cfe4f6,#a5c7e6 55%,#7ba3cc); }
-.tex-navy{ background:radial-gradient(120% 120% at 30% 20%,#1d4e80,#12345a 55%,#0a1f38); }
-.tex-emerald{ background:radial-gradient(120% 120% at 30% 20%,#1b93b6,#126882 55%,#0a4254); }
-.tex-plum{ background:radial-gradient(120% 120% at 30% 20%,#3c528c,#273864 55%,#182346); }
+/* real leatherette / rexine swatch fills (a genuine material sample board) */
+.tex-cognac{ background:radial-gradient(125% 125% at 30% 18%,#c07a45,#8a4c26 52%,#5c2f16); }
+.tex-oxblood{ background:radial-gradient(125% 125% at 30% 18%,#8a2f3b,#5a1d26 52%,#341016); }
+.tex-charcoal{ background:radial-gradient(125% 125% at 30% 18%,#33393f,#20252a 58%,#12151a); }
+.tex-teal{ background:radial-gradient(125% 125% at 30% 18%,#1f9aa0,#0f6f74 52%,#0a474b); }
+.tex-sand{ background:radial-gradient(125% 125% at 30% 18%,#e7d3ad,#cdb185 52%,#a9895c); }
+.tex-navy{ background:radial-gradient(125% 125% at 30% 18%,#264d80,#173257 52%,#0d1c34); }
+.tex-emerald{ background:radial-gradient(125% 125% at 30% 18%,#1f8a5f,#136343 52%,#0b3d29); }
+.tex-plum{ background:radial-gradient(125% 125% at 30% 18%,#5d3f78,#3f2a55 52%,#261634); }
 /* subtle grain overlay for material feel */
 .tex-grain{ position:relative; }
 .tex-grain::before{ content:""; position:absolute; inset:0;
@@ -273,13 +272,13 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 .prod-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
 .prod{ position:relative; border-radius:var(--radius); border:1px solid var(--line);
   background:var(--surface); display:flex; flex-direction:column;
-  box-shadow:0 1px 3px rgba(20,45,90,.05);
-  transition:transform .4s var(--ease), border-color .4s, box-shadow .4s; }
+  box-shadow:0 1px 3px rgba(20,45,90,.05); will-change:transform;
+  transition:transform .2s var(--ease), border-color .2s, box-shadow .2s; }
 .prod:hover{ transform:translateY(-6px); border-color:var(--accent); box-shadow:var(--shadow); }
 .prod-body{ position:relative; z-index:1; padding:30px; }
 .prod .picon{ width:56px; height:56px; border-radius:16px; display:grid; place-items:center; margin-bottom:22px;
   background:linear-gradient(150deg, rgba(0,137,226,.14), rgba(0,137,226,.05));
-  border:1px solid var(--line); transition:background .4s, transform .4s; }
+  border:1px solid var(--line); transition:background .2s, transform .2s; }
 .prod:hover .picon{ background:linear-gradient(150deg, rgba(0,137,226,.24), rgba(0,137,226,.09)); transform:translateY(-2px); }
 .prod .picon svg{ width:28px; height:28px; color:var(--accent); }
 .prod .pnum{ font-family:'Playfair Display',serif; font-style:italic; color:var(--accent); font-size:15px; }
@@ -293,7 +292,7 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 .why{ background:var(--bg-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
 .why-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
 .feature{ display:flex; gap:20px; padding:30px; border-radius:var(--radius); border:1px solid var(--line);
-  background:linear-gradient(160deg,var(--surface),var(--bg-2)); transition:border-color .4s, transform .4s; }
+  background:linear-gradient(160deg,var(--surface),var(--bg-2)); will-change:transform; transition:border-color .2s, transform .2s; }
 .feature:hover{ border-color:var(--line-strong); transform:translateY(-4px); }
 .feature .fic{ flex:0 0 auto; width:52px; height:52px; border-radius:14px; display:grid; place-items:center;
   background:radial-gradient(120% 120% at 30% 20%,rgba(0,137,226,.24),rgba(10,111,181,.12));
@@ -305,7 +304,7 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 /* ============ REVIEWS ============ */
 .reviews-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
 .review{ border:1px solid var(--line); border-radius:var(--radius); padding:30px; background:var(--surface);
-  display:flex; flex-direction:column; gap:18px; transition:border-color .4s, transform .4s; }
+  display:flex; flex-direction:column; gap:18px; will-change:transform; transition:border-color .2s, transform .2s; }
 .review:hover{ border-color:var(--line-strong); transform:translateY(-4px); }
 .review .stars{ font-size:16px; }
 .review .quote{ font-family:'Playfair Display',serif; font-size:19px; line-height:1.5; color:var(--text); font-style:italic; }

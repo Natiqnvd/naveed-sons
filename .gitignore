@@ -1,3 +1,7 @@
 .claude/
 scratchpad/
 .DS_Store
+
+# Local-only working docs — never commit/push
+CLAUDE.md
+handoff.md
