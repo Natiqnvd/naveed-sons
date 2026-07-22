@@ -301,19 +301,16 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 .prod-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; align-items:start; }
 .prod-group{ position:relative; border-radius:var(--radius); border:1px solid var(--line);
   background:var(--surface); box-shadow:0 1px 3px rgba(20,45,90,.05); align-self:start;
-  transition:transform .2s var(--ease), border-color .2s, opacity .9s var(--ease-out); }
+  transition:border-color .2s, opacity .9s var(--ease-out); }
 .prod-group::after{ content:""; position:absolute; inset:0; z-index:-1; border-radius:inherit;
   box-shadow:var(--shadow); opacity:0; transition:opacity .2s; pointer-events:none; }
-.prod-group:hover{ transform:translateY(-4px); border-color:var(--accent); }
-.prod-group:hover::after{ opacity:1; }
+.prod-group:hover{ border-color:var(--accent); }
 .prod-group.open{ border-color:var(--accent); }
 .prod-group.open::after{ opacity:1; }
 .prod-head{ width:100%; display:flex; align-items:center; gap:18px; padding:26px 28px;
   background:none; border:0; cursor:pointer; text-align:left; font:inherit; color:inherit; }
 .prod-head .picon{ margin:0; flex:0 0 auto; width:52px; height:52px; border-radius:15px; display:grid; place-items:center;
-  background:linear-gradient(150deg, rgba(0,137,226,.14), rgba(0,137,226,.05)); border:1px solid var(--line);
-  transition:transform .2s; }
-.prod-group:hover .prod-head .picon,.prod-group.open .prod-head .picon{ transform:translateY(-2px); }
+  background:linear-gradient(150deg, rgba(0,137,226,.14), rgba(0,137,226,.05)); border:1px solid var(--line); }
 .prod-head .picon svg{ width:25px; height:25px; color:var(--accent); }
 /* category colour-coded icon badges — same swatch family as the hero & about mosaic */
 .picon.pic-cognac{ background:radial-gradient(125% 125% at 30% 18%,#c07a45,#8a4c26 52%,#5c2f16); }
@@ -336,10 +333,10 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
   border:1px solid var(--line); color:var(--accent); transition:transform .3s var(--ease), background .2s, border-color .2s; }
 .prod-chev svg{ width:17px; height:17px; }
 .prod-group.open .prod-chev{ transform:rotate(180deg); background:rgba(0,137,226,.08); border-color:var(--accent); }
-/* grid-template-rows 0fr→1fr: expands to exact content height, no arbitrary max-height overshoot */
-.prod-panel{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .38s var(--ease); }
-.prod-group.open .prod-panel{ grid-template-rows:1fr; }
-.prod-panel-inner{ overflow:hidden; min-height:0; }
+/* height is measured and set by JS (element.scrollHeight) on toggle — avoids all
+   grid-fr/max-height collapse ambiguity, always matches real content exactly */
+.prod-panel{ height:0; overflow:hidden; transition:height .35s var(--ease); }
+.prod-panel-inner{ overflow:hidden; }
 .prod-gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:2px 28px 28px; }
 .prod-item{ border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--line); background:var(--bg-2); }
 .prod-item img,.prod-item .swatch{ width:100%; height:150px; object-fit:cover; display:block; }
@@ -1107,22 +1104,37 @@ const CONFIG = {
   toggle.addEventListener('click', ()=> links.classList.toggle('open'));
   links.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> links.classList.remove('open')));
 
-  /* ---- product cards expand/collapse (single-open: opening one closes the rest) ---- */
+  /* ---- product cards expand/collapse (single-open: opening one closes the rest) ----
+     height is measured directly (scrollHeight) and set in px — no CSS grid/max-height
+     ambiguity, so the panel always collapses to exactly 0 and expands to exact content size */
   const prodGroups = Array.from(document.querySelectorAll('.prod-group'));
+  const closeProdGroup = (g)=>{
+    g.classList.remove('open');
+    g.querySelector('.prod-head')?.setAttribute('aria-expanded', 'false');
+    const p = g.querySelector('.prod-panel');
+    if(p) p.style.height = '0px';
+  };
   prodGroups.forEach(group=>{
     const head = group.querySelector('.prod-head');
-    if(!head) return;
+    const panel = group.querySelector('.prod-panel');
+    const inner = group.querySelector('.prod-panel-inner');
+    if(!head || !panel || !inner) return;
     head.addEventListener('click', ()=>{
       const wasOpen = group.classList.contains('open');
-      prodGroups.forEach(g=>{
-        g.classList.remove('open');
-        g.querySelector('.prod-head')?.setAttribute('aria-expanded', 'false');
-      });
+      prodGroups.forEach(closeProdGroup);
       if(!wasOpen){
         group.classList.add('open');
         head.setAttribute('aria-expanded', 'true');
+        panel.style.height = inner.scrollHeight + 'px';
       }
     });
+  });
+  window.addEventListener('resize', ()=>{
+    const openGroup = prodGroups.find(g=> g.classList.contains('open'));
+    if(!openGroup) return;
+    const panel = openGroup.querySelector('.prod-panel');
+    const inner = openGroup.querySelector('.prod-panel-inner');
+    if(panel && inner) panel.style.height = inner.scrollHeight + 'px';
   });
 
   /* ---- scroll-spy: highlight the nav link for the section in view ---- */
