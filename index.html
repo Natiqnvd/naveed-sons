@@ -56,6 +56,9 @@
 
   --ease: cubic-bezier(.22,.61,.36,1);
   --ease-out: cubic-bezier(.16,1,.3,1);
+  /* single source of truth for the .reveal fade+slide transition — components with their
+     own transition rule must include var(--reveal-t) in it or they'll silently override it */
+  --reveal-t: opacity .9s var(--ease-out), transform .9s var(--ease-out);
 
   --shadow: 0 24px 60px -20px rgba(20,45,90,.18);
   --shadow-lg: 0 40px 100px -30px rgba(20,45,90,.22);
@@ -256,7 +259,7 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 .sec-head p{ margin-top:20px; color:var(--text-soft); font-size:clamp(16px,1.7vw,18.5px); }
 
 /* reveal */
-.reveal{ opacity:0; transform:translateY(34px); transition:opacity .9s var(--ease-out), transform .9s var(--ease-out); }
+.reveal{ opacity:0; transform:translateY(34px); transition:var(--reveal-t); }
 .reveal.show{ opacity:1; transform:none; }
 .reveal.d1{ transition-delay:.08s;} .reveal.d2{ transition-delay:.16s;} .reveal.d3{ transition-delay:.24s;}
 .reveal.d4{ transition-delay:.32s;} .reveal.d5{ transition-delay:.40s;} .reveal.d6{ transition-delay:.48s;}
@@ -300,8 +303,8 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 /* every card is an identical press-to-expand unit — pressing reveals a colour/material gallery */
 .prod-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; align-items:start; }
 .prod-group{ position:relative; border-radius:var(--radius); border:1px solid var(--line);
-  background:var(--surface); box-shadow:0 1px 3px rgba(20,45,90,.05); align-self:start;
-  transition:border-color .2s, opacity .9s var(--ease-out); }
+  background:var(--surface); box-shadow:0 1px 3px rgba(20,45,90,.05);
+  transition:border-color .2s, var(--reveal-t); }
 .prod-group::after{ content:""; position:absolute; inset:0; z-index:-1; border-radius:inherit;
   box-shadow:var(--shadow); opacity:0; transition:opacity .2s; pointer-events:none; }
 .prod-group:hover{ border-color:var(--accent); }
@@ -312,16 +315,10 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 .prod-head .picon{ margin:0; flex:0 0 auto; width:52px; height:52px; border-radius:15px; display:grid; place-items:center;
   background:linear-gradient(150deg, rgba(0,137,226,.14), rgba(0,137,226,.05)); border:1px solid var(--line); }
 .prod-head .picon svg{ width:25px; height:25px; color:var(--accent); }
-/* category colour-coded icon badges — same swatch family as the hero & about mosaic */
-.picon.pic-cognac{ background:radial-gradient(125% 125% at 30% 18%,#c07a45,#8a4c26 52%,#5c2f16); }
-.picon.pic-sand{ background:radial-gradient(125% 125% at 30% 18%,#e7d3ad,#cdb185 52%,#a9895c); }
-.picon.pic-charcoal{ background:radial-gradient(125% 125% at 30% 18%,#33393f,#20252a 58%,#12151a); }
-.picon.pic-navy{ background:radial-gradient(125% 125% at 30% 18%,#264d80,#173257 52%,#0d1c34); }
-.picon.pic-teal{ background:radial-gradient(125% 125% at 30% 18%,#1f9aa0,#0f6f74 52%,#0a474b); }
-.picon.pic-plum{ background:radial-gradient(125% 125% at 30% 18%,#5d3f78,#3f2a55 52%,#261634); }
-.picon.pic-oxblood{ background:radial-gradient(125% 125% at 30% 18%,#8a2f3b,#5a1d26 52%,#341016); }
-.picon.pic-cognac svg,.picon.pic-sand svg,.picon.pic-charcoal svg,
-.picon.pic-navy svg,.picon.pic-teal svg,.picon.pic-plum svg,.picon.pic-oxblood svg{ color:#fff; }
+/* category colour-coded icon badges — reuse the existing .tex-* swatch fills directly
+   (same family as the hero & about mosaic) instead of redeclaring the gradients */
+.picon.tex-cognac svg,.picon.tex-sand svg,.picon.tex-charcoal svg,
+.picon.tex-navy svg,.picon.tex-teal svg,.picon.tex-plum svg,.picon.tex-oxblood svg{ color:#fff; }
 .prod-head-txt{ flex:1 1 auto; min-width:0; }
 .prod-head-txt h3{ font-size:19px; color:var(--text); }
 .prod-head-txt p{ margin-top:5px; color:var(--text-soft); font-size:14px; }
@@ -336,7 +333,6 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 /* height is measured and set by JS (element.scrollHeight) on toggle — avoids all
    grid-fr/max-height collapse ambiguity, always matches real content exactly */
 .prod-panel{ height:0; overflow:hidden; transition:height .35s var(--ease); }
-.prod-panel-inner{ overflow:hidden; }
 .prod-gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:2px 28px 28px; }
 .prod-item{ border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--line); background:var(--bg-2); }
 .prod-item img,.prod-item .swatch{ width:100%; height:150px; object-fit:cover; display:block; }
@@ -351,7 +347,6 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 .why-grid{ display:grid; grid-template-columns:.85fr 1.15fr; gap:clamp(40px,6vw,84px); align-items:center; }
 .why-lead h2{ font-size:clamp(30px,4.4vw,46px); }
 .why-lead p{ margin-top:18px; color:var(--text-soft); max-width:36ch; font-size:16px; }
-.why-list{ display:grid; }
 .why-item{ display:flex; gap:20px; padding:22px 0; border-bottom:1px solid var(--line); }
 .why-item:first-child{ padding-top:0; }
 .why-item:last-child{ border-bottom:none; padding-bottom:0; }
@@ -366,7 +361,11 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 .reviews-grid{ display:grid; grid-template-columns:1.6fr 1fr; gap:22px; }
 .reviews-side{ display:flex; flex-direction:column; gap:22px; }
 .review{ border:1px solid var(--line); border-radius:var(--radius); padding:30px; background:var(--surface);
-  display:flex; flex-direction:column; gap:18px; transition:border-color .2s, transform .2s, opacity .9s var(--ease-out); }
+  display:flex; flex-direction:column; gap:18px;
+  /* transform intentionally overrides --reveal-t's .9s with a snappier .2s — review cards
+     have their own hover-lift and transform can only carry one duration; opacity still
+     follows --reveal-t's .9s so the fade-in stays consistent with the rest of the site */
+  transition:border-color .2s, transform .2s, opacity .9s var(--ease-out); }
 .review:hover{ border-color:var(--line-strong); transform:translateY(-4px); }
 .review .stars{ font-size:16px; }
 .review .quote{ font-family:'Playfair Display',serif; font-size:19px; line-height:1.5; color:var(--text); font-style:italic; }
@@ -392,7 +391,7 @@ section{ position:relative; padding:clamp(72px,10vw,140px) 0; }
 .contact-info > p{ margin-top:18px; color:var(--text-soft); max-width:42ch; }
 .info-list{ margin-top:34px; display:grid; gap:14px; }
 .info-item{ display:flex; gap:16px; align-items:flex-start; padding:18px 20px; border:1px solid var(--line);
-  border-radius:var(--radius-sm); background:var(--surface); transition:border-color .3s, background .3s, opacity .9s var(--ease-out), transform .9s var(--ease-out); }
+  border-radius:var(--radius-sm); background:var(--surface); transition:border-color .3s, background .3s, var(--reveal-t); }
 .info-item:hover{ border-color:var(--line-strong); }
 a.info-item:hover{ background:var(--surface-2); }
 .info-item .iic{ flex:0 0 auto; width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
@@ -600,9 +599,9 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
       <h2 class="reveal d1">A full range</h2>
     </div>
     <div class="prod-grid">
-      <section class="prod-group reveal" id="prodGroup1">
-        <button class="prod-head" type="button" id="prodToggle1" aria-expanded="false" aria-controls="prodPanel1">
-          <span class="picon pic-cognac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></span>
+      <section class="prod-group reveal">
+        <button class="prod-head" type="button" aria-expanded="false" aria-controls="prodPanel1">
+          <span class="picon tex-cognac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></span>
           <span class="prod-head-txt">
             <h3>Rexine &amp; PVC Synthetic Leather</h3>
             <p>All types and thicknesses, in every colour.</p>
@@ -612,18 +611,16 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
           <span class="prod-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="prod-panel" id="prodPanel1">
-          <div class="prod-panel-inner">
             <div class="prod-gallery">
               <figure class="prod-item"><span class="swatch tex-cognac tex-grain"></span><figcaption class="cap"><h4>Cognac Tan</h4><p>Our most popular warm tan shade.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-oxblood tex-grain"></span><figcaption class="cap"><h4>Oxblood</h4><p>Deep wine-red, a premium finish.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-charcoal tex-grain"></span><figcaption class="cap"><h4>Charcoal Black</h4><p>Classic black, our best seller.</p></figcaption></figure>
             </div>
-          </div>
         </div>
       </section>
-      <section class="prod-group reveal d1" id="prodGroup2">
-        <button class="prod-head" type="button" id="prodToggle2" aria-expanded="false" aria-controls="prodPanel2">
-          <span class="picon pic-sand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2.5"/><rect x="3" y="13" width="18" height="7" rx="2.5"/></svg></span>
+      <section class="prod-group reveal d1">
+        <button class="prod-head" type="button" aria-expanded="false" aria-controls="prodPanel2">
+          <span class="picon tex-sand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2.5"/><rect x="3" y="13" width="18" height="7" rx="2.5"/></svg></span>
           <span class="prod-head-txt">
             <h3>Foam &amp; Foam Products</h3>
             <p>Cushioning foam in all densities and sizes.</p>
@@ -633,18 +630,16 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
           <span class="prod-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="prod-panel" id="prodPanel2">
-          <div class="prod-panel-inner">
             <div class="prod-gallery">
               <figure class="prod-item"><span class="swatch tex-sand tex-grain"></span><figcaption class="cap"><h4>Soft Density</h4><p>For cushions &amp; light padding.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-navy tex-grain"></span><figcaption class="cap"><h4>Medium Density</h4><p>Everyday sofa &amp; seat foam.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-charcoal tex-grain"></span><figcaption class="cap"><h4>Firm Density</h4><p>High-support mattress-grade foam.</p></figcaption></figure>
             </div>
-          </div>
         </div>
       </section>
-      <section class="prod-group reveal d2" id="prodGroup3">
-        <button class="prod-head" type="button" id="prodToggle3" aria-expanded="false" aria-controls="prodPanel3">
-          <span class="picon pic-charcoal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span>
+      <section class="prod-group reveal d2">
+        <button class="prod-head" type="button" aria-expanded="false" aria-controls="prodPanel3">
+          <span class="picon tex-charcoal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span>
           <span class="prod-head-txt">
             <h3>PVC Vinyl Flooring</h3>
             <p>Durable, easy-clean rolls and tiles.</p>
@@ -654,18 +649,16 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
           <span class="prod-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="prod-panel" id="prodPanel3">
-          <div class="prod-panel-inner">
             <div class="prod-gallery">
               <figure class="prod-item"><span class="swatch tex-charcoal tex-grain"></span><figcaption class="cap"><h4>Slate Grey</h4><p>Modern matte finish, easy-clean.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-sand tex-grain"></span><figcaption class="cap"><h4>Oak Sand</h4><p>Warm wood-look vinyl tile.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-navy tex-grain"></span><figcaption class="cap"><h4>Deep Navy</h4><p>Bold navy roll for feature areas.</p></figcaption></figure>
             </div>
-          </div>
         </div>
       </section>
-      <section class="prod-group reveal d3" id="prodGroup4">
-        <button class="prod-head" type="button" id="prodToggle4" aria-expanded="false" aria-controls="prodPanel4">
-          <span class="picon pic-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.6-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.5-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
+      <section class="prod-group reveal d3">
+        <button class="prod-head" type="button" aria-expanded="false" aria-controls="prodPanel4">
+          <span class="picon tex-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.6-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.5-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span>
           <span class="prod-head-txt">
             <h3>Auto Cloth</h3>
             <p>Upholstery fabric &amp; leatherette for car interiors.</p>
@@ -675,18 +668,16 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
           <span class="prod-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="prod-panel" id="prodPanel4">
-          <div class="prod-panel-inner">
             <div class="prod-gallery">
               <figure class="prod-item"><span class="swatch tex-navy tex-grain"></span><figcaption class="cap"><h4>Navy</h4><p>Standard navy auto interior cloth.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-charcoal tex-grain"></span><figcaption class="cap"><h4>Charcoal</h4><p>Neutral charcoal, fits any interior.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-oxblood tex-grain"></span><figcaption class="cap"><h4>Oxblood Red</h4><p>Bold red accent trim leatherette.</p></figcaption></figure>
             </div>
-          </div>
         </div>
       </section>
-      <section class="prod-group reveal d4" id="prodGroup5">
-        <button class="prod-head" type="button" id="prodToggle5" aria-expanded="false" aria-controls="prodPanel5">
-          <span class="picon pic-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11a2 2 0 0 1 2 2v3h16v-3a2 2 0 0 1 2-2 2 2 0 0 0-2-2 2 2 0 0 0-2 2v3H6v-3a2 2 0 0 0-2-2 2 2 0 0 0-2 2Z"/><path d="M4 18v2M20 18v2M12 4v9"/></svg></span>
+      <section class="prod-group reveal d4">
+        <button class="prod-head" type="button" aria-expanded="false" aria-controls="prodPanel5">
+          <span class="picon tex-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"/><path d="M2 11a2 2 0 0 1 2 2v3h16v-3a2 2 0 0 1 2-2 2 2 0 0 0-2-2 2 2 0 0 0-2 2v3H6v-3a2 2 0 0 0-2-2 2 2 0 0 0-2 2Z"/><path d="M4 18v2M20 18v2M12 4v9"/></svg></span>
           <span class="prod-head-txt">
             <h3>Sofa &amp; Upholstery Cloth</h3>
             <p>Sofa fabrics and covering cloth for furniture.</p>
@@ -696,18 +687,16 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
           <span class="prod-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="prod-panel" id="prodPanel5">
-          <div class="prod-panel-inner">
             <div class="prod-gallery">
               <figure class="prod-item"><span class="swatch tex-teal tex-grain"></span><figcaption class="cap"><h4>Teal</h4><p>Rich teal upholstery cloth.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-plum tex-grain"></span><figcaption class="cap"><h4>Plum</h4><p>Deep plum, designer sofa fabric.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-sand tex-grain"></span><figcaption class="cap"><h4>Sand</h4><p>Neutral sand, fits any decor.</p></figcaption></figure>
             </div>
-          </div>
         </div>
       </section>
-      <section class="prod-group reveal d5" id="prodGroup6">
-        <button class="prod-head" type="button" id="prodToggle6" aria-expanded="false" aria-controls="prodPanel6">
-          <span class="picon pic-plum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M12 4v6M2 18h20"/></svg></span>
+      <section class="prod-group reveal d5">
+        <button class="prod-head" type="button" aria-expanded="false" aria-controls="prodPanel6">
+          <span class="picon tex-plum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M12 4v6M2 18h20"/></svg></span>
           <span class="prod-head-txt">
             <h3>Quilts, Pillows &amp; Bedding</h3>
             <p>Ready-made quilts and pillows for home bedding.</p>
@@ -717,18 +706,16 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
           <span class="prod-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="prod-panel" id="prodPanel6">
-          <div class="prod-panel-inner">
             <div class="prod-gallery">
               <figure class="prod-item"><span class="swatch tex-plum tex-grain"></span><figcaption class="cap"><h4>Plum</h4><p>Rich plum quilt &amp; pillow sets.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-teal tex-grain"></span><figcaption class="cap"><h4>Teal</h4><p>Fresh teal bedding prints.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-emerald tex-grain"></span><figcaption class="cap"><h4>Emerald</h4><p>Deep emerald, ready-made sets.</p></figcaption></figure>
             </div>
-          </div>
         </div>
       </section>
-      <section class="prod-group reveal" id="prodGroup7">
-        <button class="prod-head" type="button" id="prodToggle7" aria-expanded="false" aria-controls="prodPanel7">
-          <span class="picon pic-oxblood"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l6-6M3 15l12-12M9 21l12-12M15 21l6-6"/></svg></span>
+      <section class="prod-group reveal">
+        <button class="prod-head" type="button" aria-expanded="false" aria-controls="prodPanel7">
+          <span class="picon tex-oxblood"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l6-6M3 15l12-12M9 21l12-12M15 21l6-6"/></svg></span>
           <span class="prod-head-txt">
             <h3>Quilting Leatherette</h3>
             <p>Custom-quilted rexine and leatherette for upholstery and interiors.</p>
@@ -738,17 +725,15 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
           <span class="prod-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="prod-panel" id="prodPanel7">
-          <div class="prod-panel-inner">
             <div class="prod-gallery">
               <figure class="prod-item"><span class="swatch tex-oxblood tex-grain"></span><figcaption class="cap"><h4>Oxblood Quilted</h4><p>Diamond-quilted oxblood leatherette.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-cognac tex-grain"></span><figcaption class="cap"><h4>Cognac Quilted</h4><p>Warm tan, custom quilt pattern.</p></figcaption></figure>
               <figure class="prod-item"><span class="swatch tex-navy tex-grain"></span><figcaption class="cap"><h4>Navy Quilted</h4><p>Navy quilted panels for interiors.</p></figcaption></figure>
             </div>
-          </div>
         </div>
       </section>
-      <section class="prod-group reveal d1" id="prodGroup8">
-        <button class="prod-head" type="button" id="prodToggle8" aria-expanded="false" aria-controls="prodPanel8">
+      <section class="prod-group reveal d1">
+        <button class="prod-head" type="button" aria-expanded="false" aria-controls="prodPanel8">
           <span class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span>
           <span class="prod-head-txt">
             <h3>Packing Materials</h3>
@@ -759,7 +744,6 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
           <span class="prod-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="prod-panel" id="prodPanel8">
-          <div class="prod-panel-inner">
             <div class="prod-gallery">
               <figure class="prod-item">
                 <img src="images/packing-bubble-wrap.jpg" alt="Roll of protective bubble wrap" loading="lazy" width="1000" height="800">
@@ -774,7 +758,6 @@ footer{ padding:64px 0 40px; border-top:1px solid var(--line); }
                 <figcaption class="cap"><h4>Corrugated Sheet (Ghatta)</h4><p>Sturdy corrugated ghatta sheets for protective packing.</p></figcaption>
               </figure>
             </div>
-          </div>
         </div>
       </section>
     </div>
@@ -1077,7 +1060,8 @@ const CONFIG = {
   });
 
   /* ---- hero intro (robust: rAF for smooth start + timeout fallback) ---- */
-  const startHero = ()=>{ const h=document.getElementById('hero'); if(h) h.classList.add('in'); };
+  const heroEl = document.getElementById('hero');
+  const startHero = ()=>{ if(heroEl) heroEl.classList.add('in'); };
   requestAnimationFrame(()=>setTimeout(startHero, 80));
   setTimeout(startHero, 400);
 
@@ -1095,7 +1079,6 @@ const CONFIG = {
   window.addEventListener('scroll', ()=>{
     if(!scrollTicking){ requestAnimationFrame(updateScroll); scrollTicking = true; }
   }, {passive:true});
-  window.addEventListener('resize', ()=>{ docHeight = document.documentElement.scrollHeight - window.innerHeight; });
   updateScroll();
 
   /* ---- mobile menu ---- */
@@ -1107,34 +1090,33 @@ const CONFIG = {
   /* ---- product cards expand/collapse (single-open: opening one closes the rest) ----
      height is measured directly (scrollHeight) and set in px — no CSS grid/max-height
      ambiguity, so the panel always collapses to exactly 0 and expands to exact content size */
-  const prodGroups = Array.from(document.querySelectorAll('.prod-group'));
-  const closeProdGroup = (g)=>{
-    g.classList.remove('open');
-    g.querySelector('.prod-head')?.setAttribute('aria-expanded', 'false');
-    const p = g.querySelector('.prod-panel');
-    if(p) p.style.height = '0px';
+  const prodEntries = Array.from(document.querySelectorAll('.prod-group')).map(group=>({
+    group, head: group.querySelector('.prod-head'), panel: group.querySelector('.prod-panel')
+  })).filter(e=> e.head && e.panel);
+  const closeProdEntry = (e)=>{
+    e.group.classList.remove('open');
+    e.head.setAttribute('aria-expanded', 'false');
+    e.panel.style.height = '0px';
   };
-  prodGroups.forEach(group=>{
-    const head = group.querySelector('.prod-head');
-    const panel = group.querySelector('.prod-panel');
-    const inner = group.querySelector('.prod-panel-inner');
-    if(!head || !panel || !inner) return;
-    head.addEventListener('click', ()=>{
-      const wasOpen = group.classList.contains('open');
-      prodGroups.forEach(closeProdGroup);
+  prodEntries.forEach(entry=>{
+    entry.head.addEventListener('click', ()=>{
+      const wasOpen = entry.group.classList.contains('open');
+      // measure before closing anything else, so this read isn't sandwiched between two write passes
+      const targetHeight = wasOpen ? null : entry.panel.scrollHeight;
+      prodEntries.forEach(closeProdEntry);
       if(!wasOpen){
-        group.classList.add('open');
-        head.setAttribute('aria-expanded', 'true');
-        panel.style.height = inner.scrollHeight + 'px';
+        entry.group.classList.add('open');
+        entry.head.setAttribute('aria-expanded', 'true');
+        entry.panel.style.height = targetHeight + 'px';
       }
     });
   });
+
+  /* ---- combined resize handling: doc height (for the progress bar) + open accordion panel ---- */
   window.addEventListener('resize', ()=>{
-    const openGroup = prodGroups.find(g=> g.classList.contains('open'));
-    if(!openGroup) return;
-    const panel = openGroup.querySelector('.prod-panel');
-    const inner = openGroup.querySelector('.prod-panel-inner');
-    if(panel && inner) panel.style.height = inner.scrollHeight + 'px';
+    docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const openEntry = prodEntries.find(e=> e.group.classList.contains('open'));
+    if(openEntry) openEntry.panel.style.height = openEntry.panel.scrollHeight + 'px';
   });
 
   /* ---- scroll-spy: highlight the nav link for the section in view ---- */
@@ -1146,7 +1128,7 @@ const CONFIG = {
     entries.forEach(e=>{
       if(!e.isIntersecting) return;
       const link = navAnchors.find(a=> a.getAttribute('href') === '#'+e.target.id);
-      if(!link) return;
+      if(!link || link.classList.contains('active')) return;
       navAnchors.forEach(a=>{ a.classList.remove('active'); a.removeAttribute('aria-current'); });
       link.classList.add('active'); link.setAttribute('aria-current','true');
     });
@@ -1261,7 +1243,7 @@ const CONFIG = {
     const gio = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{ if(e.isIntersecting && !document.hidden) start(); else stop(); });
     }, {threshold:0});
-    gio.observe(document.getElementById('hero'));
+    gio.observe(heroEl);
     document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stop(); });
     let rt; window.addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(resize,200); });
   }
